@@ -95,11 +95,6 @@ public class Robot {
         intake.setPower(power);
     }
 
-<<<<<<< HEAD
     // public void setClawPosition(double position) { claw.setPosition(position); }
     // public void setClawAnglePosition(double position) { clawAngle.setPosition(position); }
-=======
-    public void setClawPosition(double position) { claw.setPosition(position); }
-    public void setClawAnglePosition(double position) { clawAngle.setPosition(position); }
->>>>>>> 22e3cd9f2342358717be4ac811e302d47dad8cc4
 }
