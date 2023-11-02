@@ -13,13 +13,13 @@ public class Robot {
     private LinearOpMode myOpMode = null;   // gain access to methods in the calling OpMode.
 
     // Define Motor and Servo objects  (Make them private so they can't be accessed externally)
-    private DcMotor leftBack   = null;
-    private DcMotor rightBack  = null;
-    private DcMotor leftFront  = null;
-    private DcMotor rightFront  = null;
-    private DcMotor leftArm = null;
-    private DcMotor rightArm = null;
-    private DcMotor intake = null;
+    public DcMotor leftBack   = null;
+    public DcMotor rightBack  = null;
+    public DcMotor leftFront  = null;
+    public DcMotor rightFront  = null;
+    public DcMotor leftArm = null;
+    public DcMotor rightArm = null;
+    public Servo claw = null;
     // private Servo claw = null;
     // private Servo clawAngle = null;
 
@@ -43,13 +43,8 @@ public class Robot {
         leftArm = myOpMode.hardwareMap.get(DcMotor.class, "LEFT_ARM");
         rightArm = myOpMode.hardwareMap.get(DcMotor.class, "RIGHT_ARM");
 
-       intake =  myOpMode.hardwareMap.get(DcMotor.class, "INTAKE");
-
         //  Define and Initialize Servo
-        // claw = myOpMode.hardwareMap.get(Servo.class, "SERVO");
-        // clawAngle = myOpMode.hardwareMap.get(Servo.class, "SERVO_ANGLE");
-        // claw.setPosition(INIT_SERVO_POSITION);
-        // clawAngle.setPosition(INIT_SERVO_POSITION);
+        claw = myOpMode.hardwareMap.get(Servo.class, "SERVO");
 
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -70,7 +65,6 @@ public class Robot {
 
         leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
         rightArm.setDirection(DcMotorSimple.Direction.FORWARD);
-
 
         myOpMode.telemetry.addData("Hello", "Hardware Initialized");
         myOpMode.telemetry.update();
@@ -100,10 +94,5 @@ public class Robot {
         rightArm.setPower(power);
     }
 
-    public void setIntakePower(double power){
-        intake.setPower(power);
-    }
-
-    // public void setClawPosition(double position) { claw.setPosition(position); }
-    // public void setClawAnglePosition(double position) { clawAngle.setPosition(position); }
+    public void setClawPosition(double position) { claw.setPosition(position); }
 }

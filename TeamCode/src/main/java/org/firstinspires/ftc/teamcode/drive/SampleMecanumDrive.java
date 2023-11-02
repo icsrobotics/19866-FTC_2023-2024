@@ -55,11 +55,10 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 1);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 1);
 
-    public static double STRAFE_ERROR = 1.5;
-    public static double LATERAL_MULTIPLIER = 1 * STRAFE_ERROR;
+    public static double LATERAL_MULTIPLIER = 1.6;
 
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
@@ -72,7 +71,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     private TrajectoryFollower follower;
 
-    private DcMotorEx leftFront, leftRear, rightRear, rightFront;
+    private DcMotorEx leftFront, leftRear, rightRear, rightFront, leftArm, rightArm, scooper;
     private List<DcMotorEx> motors;
 
     private IMU imu;
@@ -106,6 +105,11 @@ public class SampleMecanumDrive extends MecanumDrive {
         rightRear = hardwareMap.get(DcMotorEx.class, "RIGHT_BACK");
         rightFront = hardwareMap.get(DcMotorEx.class, "RIGHT_FRONT");
 
+        leftArm = hardwareMap.get(DcMotorEx.class, "LEFT_ARM");
+        rightArm = hardwareMap.get(DcMotorEx.class, "RIGHT_ARM");
+
+        scooper = hardwareMap.get(DcMotorEx.class, "SCOOPER");
+
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
@@ -125,8 +129,10 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
 
         // TODO: reverse any motors using DcMotor.setDirection()
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        leftRear.setDirection(DcMotor.Direction.REVERSE);
+         rightFront.setDirection(DcMotor.Direction.REVERSE);
+         rightRear.setDirection(DcMotor.Direction.REVERSE);
+        leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightArm.setDirection(DcMotorSimple.Direction.FORWARD);
 
         List<Integer> lastTrackingEncPositions = new ArrayList<>();
         List<Integer> lastTrackingEncVels = new ArrayList<>();
@@ -291,6 +297,16 @@ public class SampleMecanumDrive extends MecanumDrive {
         rightRear.setPower(v2);
         rightFront.setPower(v3);
     }
+
+    public void setArmPower(double power) {
+        leftArm.setPower(power);
+        rightArm.setPower(power);
+    }
+
+    public void setScooperPower(double power) {
+        scooper.setPower(power);
+    }
+
 
     @Override
     public double getRawExternalHeading() {

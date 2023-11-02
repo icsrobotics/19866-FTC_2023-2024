@@ -37,8 +37,6 @@ public class Testing extends LinearOpMode {
 //            if (gamepad2.b) { robot.setClawAnglePosition(0.5); }
 
             // INTAKE
-            robot.setIntakePower(gamepad2.right_trigger);
-
             // DRIVE
             // Mecanum drive is controlled with three axes: drive (front-and-back),
             // strafe (left-and-right), and twist (rotating the whole chassis).

@@ -34,24 +34,16 @@ public class POV extends LinearOpMode {
             // ARM
             robot.setArmPower(-gamepad2.left_stick_y);
 
-            // CLAW
-//            if (gamepad2.a){
-//               robot.setClawPosition(0);
-//            } else if (gamepad2.y) {
-//                robot.setClawPosition(1.0);
-//            } else {
-//                robot.setClawPosition(0.5);
-//            }
-//
-//            // CLAW ANGLE
-//            robot.setClawAnglePosition(gamepad2.left_trigger * SOFTENER);
-//            if (gamepad2.b) { robot.setClawAnglePosition(0.5); }
-
-            // INTAKE
-            robot.setIntakePower(gamepad2.right_trigger);
+        // CLAW
+            if (gamepad2.a){
+            robot.setClawPosition(0);
+            } else if (gamepad2.y) {
+            robot.setClawPosition(1.0);
+            } else {
+            robot.setClawPosition(0.5);
+            }
 
             telemetry.update();
-
         }
     }
 }
