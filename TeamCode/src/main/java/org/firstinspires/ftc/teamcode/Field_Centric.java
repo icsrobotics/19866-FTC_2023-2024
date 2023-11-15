@@ -62,6 +62,7 @@ public class Field_Centric extends LinearOpMode {
             }
 
             drive.setArmPower(-gamepad2.left_stick_y);
+            drive.setScooperPower(gamepad2.right_stick_y);
 
             // Update everything. Odometry. Etc.
             drive.update();
