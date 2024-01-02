@@ -45,11 +45,7 @@ public class Detection extends LinearOpMode {
 
                     @Override
                     public void onError(int errorCode)
-                    {
-                        /*
-                         * This will be called if the camera could not be opened
-                         */
-                    }
+                    {}
                 });
 
                 waitForStart();

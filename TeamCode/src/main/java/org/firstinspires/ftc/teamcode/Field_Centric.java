@@ -19,7 +19,6 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 @TeleOp(group = "advanced")
 public class Field_Centric extends LinearOpMode {
 
-    Robot robot = new Robot(this);
     public double DAMPENER = 0.5;
 
     @Override
@@ -49,20 +48,28 @@ public class Field_Centric extends LinearOpMode {
             );
             if (gamepad1.a) {
                 DAMPENER = 0.3;
-                telemetry.addLine("SET TO SUPER!!! SLOw mode");
+                telemetry.addData("MODE: ", "SET TO SUPER!!! SLOw mode");
             } else if (gamepad1.b) {
                 DAMPENER = 0.5;
-                telemetry.addLine("SET TO SLOw mode");
+                telemetry.addData("MODE: ", "SET TO SLOw mode");
             } else if (gamepad1.y) {
                 DAMPENER = 0.7;
-                telemetry.addLine("SET TO SLOwish mode");
+                telemetry.addData("MODE: ", "SET TO SLOwish mode");
             } else if (gamepad1.x) {
                 DAMPENER = 1.0;
-                telemetry.addLine("NORMAL");
+                telemetry.addData("MODE: ","NORMAL");
             }
 
             drive.setArmPower(-gamepad2.left_stick_y);
             drive.setScooperPower(gamepad2.right_stick_y);
+
+            if (gamepad2.b) {
+                drive.setShooterPosition(0.5);
+            } else if (gamepad2.y) {
+                drive.setShooterPosition(0.0);
+            } else {
+                drive.setShooterPosition(0.5);
+            }
 
             // Update everything. Odometry. Etc.
             drive.update();
@@ -74,6 +81,7 @@ public class Field_Centric extends LinearOpMode {
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", poseEstimate.getHeading());
+            telemetry.addData("servo pos", drive.shooter.getPosition());
             telemetry.update();
         }
     }
