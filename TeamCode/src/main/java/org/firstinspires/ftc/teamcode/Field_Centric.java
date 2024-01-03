@@ -19,8 +19,6 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 @TeleOp(group = "advanced")
 public class Field_Centric extends LinearOpMode {
 
-    public double DAMPENER = 0.5;
-
     @Override
     public void runOpMode() throws InterruptedException {
         // Initialize SampleMecanumDrive
@@ -41,24 +39,11 @@ public class Field_Centric extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             drive.setWeightedDrivePower(
                     new Pose2d(
-                            -gamepad1.left_stick_y * DAMPENER,
-                            -gamepad1.left_stick_x * DAMPENER,
-                            -gamepad1.right_stick_x * DAMPENER
+                            -gamepad1.left_stick_y,
+                            -gamepad1.left_stick_x,
+                            -gamepad1.right_stick_x
                     )
             );
-            if (gamepad1.a) {
-                DAMPENER = 0.3;
-                telemetry.addData("MODE: ", "SET TO SUPER!!! SLOw mode");
-            } else if (gamepad1.b) {
-                DAMPENER = 0.5;
-                telemetry.addData("MODE: ", "SET TO SLOw mode");
-            } else if (gamepad1.y) {
-                DAMPENER = 0.7;
-                telemetry.addData("MODE: ", "SET TO SLOwish mode");
-            } else if (gamepad1.x) {
-                DAMPENER = 1.0;
-                telemetry.addData("MODE: ","NORMAL");
-            }
 
             drive.setArmPower(-gamepad2.left_stick_y);
             drive.setScooperPower(gamepad2.right_stick_y);
