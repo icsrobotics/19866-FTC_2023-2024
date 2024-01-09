@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import android.telephony.IccOpenLogicalChannelResponse;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -18,8 +20,9 @@ import org.openftc.easyopencv.OpenCvWebcam;
 public class RedAutoRight extends LinearOpMode {
     public double TILE = 22;
     OpenCvWebcam webcam;
-    DetectionOpenCV.NukePositionPipeline pipeline;
-    DetectionOpenCV.NukePositionPipeline.NukePosition snapshotAnalysis = DetectionOpenCV.NukePositionPipeline.NukePosition.CENTER; // default
+
+    public RedDetectionVisionPortal detecter = new RedDetectionVisionPortal(telemetry);
+    int color = 0;
 
     @Override
     public void runOpMode()
@@ -33,8 +36,6 @@ public class RedAutoRight extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new DetectionOpenCV.NukePositionPipeline();
-        webcam.setPipeline(pipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
@@ -52,9 +53,9 @@ public class RedAutoRight extends LinearOpMode {
          * The INIT-loop:
          * This REPLACES waitForStart!
          */
-        while (opModeInInit())
+        while (opModeInInit() && !isStarted())
         {
-            telemetry.addData("Realtime analysis", pipeline.getAnalysis());
+            telemetry.addData("Realtime analysis", RedDetectionVisionPortal.getReadout());
             telemetry.update();
 
             // Don't burn CPU cycles busy-looping in this sample
@@ -66,17 +67,17 @@ public class RedAutoRight extends LinearOpMode {
          * for later use. We must do this because the analysis will continue
          * to change as the camera view changes once the robot starts moving!
          */
-        snapshotAnalysis = pipeline.getAnalysis();
-
+        snapshotAnalysis = pipelsis();
+        ine.getAnaly
         /*
          * Show that snapshot on the telemetry
          */
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
 
-        switch (snapshotAnalysis)
+        switch (readout)
         {
-            case LEFT:
+            case 1:
             {
                 /* Your autonomous code */
                 telemetry.addData("Position: ","Left");
@@ -84,7 +85,7 @@ public class RedAutoRight extends LinearOpMode {
                 break;
             }
 
-            case RIGHT:
+            case 2:
             {
                 /* Your autonomous code */
                 telemetry.addData("Position: ","Right");
@@ -92,7 +93,7 @@ public class RedAutoRight extends LinearOpMode {
                 break;
             }
 
-            case CENTER:
+            case 3:
             {
                 /* Your autonomous code*/
                 telemetry.addData("Position: ","Center");

@@ -29,7 +29,7 @@ public class POV extends LinearOpMode {
 
             double drive = -gamepad1.left_stick_y * multiplier;
             double turn = gamepad1.left_stick_x * multiplier;
-            double strafe = -gamepad1.right_stick_x * 0.6;
+            double strafe = -gamepad1.right_stick_x * 0.5;
             // --------------- Calculate drive power --------------- //
             if (drive != 0 || turn != 0) {
                 leftFPower = Range.clip(drive + turn, -1.0, 1.0);
