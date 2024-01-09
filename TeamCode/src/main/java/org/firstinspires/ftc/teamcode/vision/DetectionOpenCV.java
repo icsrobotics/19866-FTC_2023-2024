@@ -15,15 +15,15 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-public class RedDetectionOpenCV extends LinearOpMode {
+public class DetectionOpenCV extends LinearOpMode {
         OpenCvWebcam webcam;
-        SkystoneDeterminationPipeline pipeline;
+        NukePositionPipeline pipeline;
 
         @Override
         public void runOpMode() {
             int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
             webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-            pipeline = new SkystoneDeterminationPipeline();
+            pipeline = new NukePositionPipeline();
             webcam.setPipeline(pipeline);
 
             // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
@@ -52,7 +52,7 @@ public class RedDetectionOpenCV extends LinearOpMode {
             }
         }
 
-        public static class SkystoneDeterminationPipeline extends OpenCvPipeline
+        public static class NukePositionPipeline extends OpenCvPipeline
         {
             public enum NukePosition
             {

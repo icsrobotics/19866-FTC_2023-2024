@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.vision.RedDetectionOpenCV;
+import org.firstinspires.ftc.teamcode.vision.DetectionOpenCV;
 import org.firstinspires.ftc.teamcode.vision.RedDetectionVisionPortal;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -16,11 +16,10 @@ import org.openftc.easyopencv.OpenCvWebcam;
 @Config
 @Autonomous(name = "Autonomous Red Right",group = "Autonomous")
 public class RedAutoRight extends LinearOpMode {
-    public RedDetectionVisionPortal detector = new RedDetectionVisionPortal(telemetry);
     public double TILE = 22;
     OpenCvWebcam webcam;
-    RedDetectionOpenCV.SkystoneDeterminationPipeline pipeline;
-    RedDetectionOpenCV.SkystoneDeterminationPipeline.NukePosition snapshotAnalysis = RedDetectionOpenCV.SkystoneDeterminationPipeline.NukePosition.CENTER; // default
+    DetectionOpenCV.NukePositionPipeline pipeline;
+    DetectionOpenCV.NukePositionPipeline.NukePosition snapshotAnalysis = DetectionOpenCV.NukePositionPipeline.NukePosition.CENTER; // default
 
     @Override
     public void runOpMode()
@@ -34,7 +33,7 @@ public class RedAutoRight extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new RedDetectionOpenCV.SkystoneDeterminationPipeline();
+        pipeline = new DetectionOpenCV.NukePositionPipeline();
         webcam.setPipeline(pipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -53,7 +52,7 @@ public class RedAutoRight extends LinearOpMode {
          * The INIT-loop:
          * This REPLACES waitForStart!
          */
-        while (!isStarted() && !isStopRequested())
+        while (opModeInInit())
         {
             telemetry.addData("Realtime analysis", pipeline.getAnalysis());
             telemetry.update();
