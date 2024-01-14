@@ -1,105 +1,80 @@
 package org.firstinspires.ftc.teamcode.auto;
 
-import android.telephony.IccOpenLogicalChannelResponse;
-
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.vision.DetectionOpenCV;
+import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.vision.RedDetectionVisionPortal;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvWebcam;
+import org.firstinspires.ftc.vision.VisionPortal;
 
 
 @Config
 @Autonomous(name = "Autonomous Red Right",group = "Autonomous")
 public class RedAutoRight extends LinearOpMode {
-    public double TILE = 22;
-    OpenCvWebcam webcam;
-
-    public RedDetectionVisionPortal detecter = new RedDetectionVisionPortal(telemetry);
+    public double TILE = 22; // 18in previous
     int color = 0;
 
+    MecanumDrive drive = new MecanumDrive(hardwareMap);
+    RedDetectionVisionPortal processor = new RedDetectionVisionPortal(telemetry);
+    VisionPortal myVisionPortal;
+
     @Override
-    public void runOpMode()
-    {
-        /**
-         * NOTE: Many comments have been omitted from this sample for the
-         * sake of conciseness. If you're just starting out with EasyOpenCv,
-         * you should take a look at {@link InternalCamera1Example} or its
-         * webcam counterpart, {@link WebcamExample} first.
-         */
+    public void runOpMode() {
+        myVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 1"), processor);
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        Trajectory trajInit = drive.trajectoryBuilder(new Pose2d())
+                .strafeRight(TILE)
+                .build();
 
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
-            @Override
-            public void onOpened()
-            {
-                webcam.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
-            }
-
-            @Override
-            public void onError(int errorCode) {}
-        });
-
-        /*
-         * The INIT-loop:
-         * This REPLACES waitForStart!
-         */
-        while (opModeInInit() && !isStarted())
-        {
+        while (opModeInInit() && !isStarted()) {
+            telemetry.addData("THE COLOR IS Truu", color);
             telemetry.addData("Realtime analysis", RedDetectionVisionPortal.getReadout());
             telemetry.update();
 
-            // Don't burn CPU cycles busy-looping in this sample
-            sleep(50);
+            color = RedDetectionVisionPortal.getReadout();
         }
 
-        /*
-         * The START command just came in: snapshot the current analysis now
-         * for later use. We must do this because the analysis will continue
-         * to change as the camera view changes once the robot starts moving!
-         */
-        snapshotAnalysis = pipelsis();
-        ine.getAnaly
-        /*
-         * Show that snapshot on the telemetry
-         */
-        telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
-        telemetry.update();
+        waitForStart();
 
-        switch (readout)
-        {
-            case 1:
-            {
-                /* Your autonomous code */
-                telemetry.addData("Position: ","Left");
-                telemetry.update();
-                break;
-            }
+        if (opModeIsActive()) {
 
-            case 2:
-            {
-                /* Your autonomous code */
-                telemetry.addData("Position: ","Right");
-                telemetry.update();
-                break;
-            }
+            // 1 - left, 3 - right, 0 - none
+            switch (color) {
+                case 0: {
+                    telemetry.addData("Position", "Unknown :(");
+                    telemetry.update();
 
-            case 3:
-            {
-                /* Your autonomous code*/
-                telemetry.addData("Position: ","Center");
-                telemetry.update();
-                break;
+                    drive.followTrajectory(trajInit);
+
+                    break;
+                }
+
+                case 1: {
+                    /* Your autonomous code */
+                    telemetry.addData("Position: ", "Left");
+                    telemetry.update();
+
+                    drive.followTrajectory(trajInit);
+
+                    break;
+                }
+
+                case 3: {
+                    /* Your autonomous code*/
+                    telemetry.addData("Position: ", "Right");
+                    telemetry.update();
+
+                    drive.followTrajectory(trajInit);
+
+                    break;
+                }
             }
         }
+
+        myVisionPortal.close();
     }
 }

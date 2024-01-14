@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.vision;
 
-
 import android.graphics.Canvas;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -19,8 +18,8 @@ public class RedDetectionVisionPortal implements VisionProcessor {
     Mat mat = new Mat();
     Mat matExtra = new Mat();
 
-//    Scalar lowBlueHSV = new Scalar(90, 50, 50);
-//    Scalar highBlueHSV = new Scalar(130, 255, 255);
+    //    Scalar lowBlueHSV = new Scalar(90, 50, 50);
+    //    Scalar highBlueHSV = new Scalar(130, 255, 255);
     Scalar lower_red1 = new Scalar(0,50,50);
     Scalar upper_red1 = new Scalar(10,255,255);
     Scalar lower_red2 = new Scalar(160,50,50);
@@ -30,24 +29,19 @@ public class RedDetectionVisionPortal implements VisionProcessor {
 
     public static double leftValue;
     public static double rightValue;
-    public static double centerValue;
     public static double leftPixels;
     public static double rightPixels;
-    public static double centerPixels;
 
     public static double thresh = 0.022;
 
     // Could remove clutter with REGION_WIDTH and REGION_HEIGHT constants
     // This is shown in the SkystoneDeterminationExample.java for easyopencv
     static final Rect LEFT_ROI = new Rect(
-            new Point(140, 200),
-            new Point(140+80, 200+75));
-    static final Rect CENTER_ROI = new Rect(
-             new Point(230,200),
-             new Point(230+90,200+75));
+            new Point(340, 100),
+            new Point(140+80, 100+175));
     static final Rect RIGHT_ROI = new Rect(
-             new Point(320, 200),
-             new Point(320+70, 200+75));
+             new Point(500, 100),
+             new Point(500+70, 100+175));
 
     // For what color  
     // Red
@@ -62,13 +56,12 @@ public class RedDetectionVisionPortal implements VisionProcessor {
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
+        // Empty... foreva
     }
-
-
 
      @Override
      public Object processFrame(Mat frame, long captureTimeNanos) {
-        Core.rotate(frame, frame, Core.ROTATE_180);
+        //Core.rotate(frame, frame, Core.ROTATE_180);
 
 
      Imgproc.cvtColor(frame, mat, Imgproc.COLOR_RGB2HSV);
@@ -82,35 +75,28 @@ public class RedDetectionVisionPortal implements VisionProcessor {
 
 
     Mat left = mat.submat(LEFT_ROI);
-    Mat center = mat.submat(CENTER_ROI);
     Mat right = mat.submat(RIGHT_ROI);
 
     leftPixels = Core.countNonZero(left);
     rightPixels = Core.countNonZero(right);
-    centerPixels = Core.countNonZero(center);
 
     leftValue = leftPixels / LEFT_ROI.area();
-    centerValue = centerPixels / CENTER_ROI.area();
     rightValue = rightPixels / RIGHT_ROI.area();
 
     left.release();
-    center.release();
     right.release();
 
-     if (leftPixels>rightPixels && leftPixels>centerPixels && (leftValue>thresh)){
+     if (leftPixels>rightPixels && (leftValue>thresh)) {
       readout = 1;
-     }else if (centerPixels>rightPixels && centerPixels>leftPixels && (centerValue>thresh)){
-      readout = 2;
-     }else if (rightPixels>leftPixels && rightPixels>centerPixels && (rightValue>thresh)){
+     } else if (rightPixels>leftPixels && (rightValue>thresh)) {
       readout = 3;
-     }else{
+     } else {
       readout = 0;
      }
 
     Imgproc.cvtColor(mat, mat, Imgproc.COLOR_GRAY2RGB);
 
     Imgproc.rectangle(mat, LEFT_ROI, readout == 1? Yes:No);
-    Imgproc.rectangle(mat, CENTER_ROI, readout == 2? Yes:No);
     Imgproc.rectangle(mat, RIGHT_ROI, readout == 3? Yes:No);
 
          mat.copyTo(frame);
