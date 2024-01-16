@@ -74,7 +74,6 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private DcMotorEx leftArm, rightArm, scooper;
     private List<DcMotorEx> motors;
-    public Servo shooter;
 
     public IMU imu;
     private VoltageSensor batteryVoltageSensor;
@@ -99,10 +98,10 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-        imu = hardwareMap.get(IMU.class, "IMU");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
-        imu.initialize(parameters);
+        // imu = hardwareMap.get(IMU.class, "imu");
+        // IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+        //         DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
+        // imu.initialize(parameters);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "LEFT_FRONT");
         leftRear = hardwareMap.get(DcMotorEx.class, "LEFT_BACK");
@@ -113,8 +112,6 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         rightArm = hardwareMap.get(DcMotorEx.class, "RIGHT_ARM");
 
         scooper = hardwareMap.get(DcMotorEx.class, "SCOOPER");
-
-        shooter = hardwareMap.get(Servo.class, "SHOOTER");
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -313,17 +310,17 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     public void setScooperPower(double power) {
         scooper.setPower(power);
     }
-    public void setShooterPosition(double position) { shooter.setPosition(position); }
 
     @Override
     public double getRawExternalHeading() {
-        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        //return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        return 0;
     }
-
-    @Override
-    public Double getExternalHeadingVelocity() {
-        return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).xRotationRate;
-    }
+    //
+    // @Override
+    // public Double getExternalHeadingVelocity() {
+    //     return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).xRotationRate;
+    // }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
         return new MinVelocityConstraint(Arrays.asList(

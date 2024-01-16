@@ -13,7 +13,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-public class RedDetectionVisionPortal implements VisionProcessor {
+public class RedVision implements VisionProcessor {
     Telemetry telemetry;
     Mat mat = new Mat();
     Mat matExtra = new Mat();
@@ -37,11 +37,11 @@ public class RedDetectionVisionPortal implements VisionProcessor {
     // Could remove clutter with REGION_WIDTH and REGION_HEIGHT constants
     // This is shown in the SkystoneDeterminationExample.java for easyopencv
     static final Rect LEFT_ROI = new Rect(
-            new Point(340, 100),
-            new Point(140+80, 100+175));
+            new Point(150, 50),
+            new Point(150+150, 50+200));
     static final Rect RIGHT_ROI = new Rect(
-             new Point(500, 100),
-             new Point(500+70, 100+175));
+             new Point(375, 50),
+             new Point(375+150, 50+200));
 
     // For what color  
     // Red
@@ -50,7 +50,7 @@ public class RedDetectionVisionPortal implements VisionProcessor {
     Scalar Yes = new Scalar(0, 255, 0);
 
 
-    public RedDetectionVisionPortal(Telemetry telemetry) {
+    public RedVision(Telemetry telemetry) {
         this.telemetry = telemetry;
     }
 
@@ -87,11 +87,11 @@ public class RedDetectionVisionPortal implements VisionProcessor {
     right.release();
 
      if (leftPixels>rightPixels && (leftValue>thresh)) {
-      readout = 1;
+      readout = 2;
      } else if (rightPixels>leftPixels && (rightValue>thresh)) {
       readout = 3;
      } else {
-      readout = 0;
+      readout = 1;
      }
 
     Imgproc.cvtColor(mat, mat, Imgproc.COLOR_GRAY2RGB);

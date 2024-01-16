@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 @Config
 @TeleOp
 public class POV extends LinearOpMode {
-    public double multiplier = 0.7;
+    public double multiplier = 0.9;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -28,8 +28,8 @@ public class POV extends LinearOpMode {
             double rightBPower;
 
             double drive = -gamepad1.left_stick_y * multiplier;
-            double turn = gamepad1.left_stick_x * multiplier;
-            double strafe = -gamepad1.right_stick_x * 0.5;
+            double turn = gamepad1.right_stick_x * multiplier;
+            double strafe = gamepad1.left_stick_x * 0.5;
             // --------------- Calculate drive power --------------- //
             if (drive != 0 || turn != 0) {
                 leftFPower = Range.clip(drive + turn, -1.0, 1.0);
@@ -53,13 +53,6 @@ public class POV extends LinearOpMode {
             robot.setArmPower(-gamepad2.left_stick_y);
             robot.setScooperPower(gamepad2.right_stick_y);
 
-            if (gamepad2.b) {
-                robot.setShooterPosition(0.5);
-            } else if (gamepad2.y) {
-                robot.setShooterPosition(0.0);
-            } else {
-                robot.setShooterPosition(0.5);
-            }
         }
     }
 }
