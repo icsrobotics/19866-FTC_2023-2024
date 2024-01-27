@@ -39,7 +39,7 @@ public class RedAutoRight extends LinearOpMode {
                 .build();
 
         Trajectory trajLeft = drive.trajectoryBuilder(trajInit.end())
-                .back(13)
+                .back(14)
                 .build();
 
 
