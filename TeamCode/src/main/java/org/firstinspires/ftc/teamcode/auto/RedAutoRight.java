@@ -15,7 +15,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @Config
 @Autonomous(name = "Autonomous Red Right",group = "Autonomous")
 public class RedAutoRight extends LinearOpMode {
-    public double TILE = 24; // 18in previous
+    public double TILE = 22; // 18in previous
     int color = 0;
 
     RedVision processor = new RedVision(telemetry);
@@ -31,15 +31,15 @@ public class RedAutoRight extends LinearOpMode {
                 .build();
 
         Trajectory trajRight = drive.trajectoryBuilder(trajInit.end())
-                .forward(TILE)
+                .forward(13)
                 .build();
 
         Trajectory trajCenter = drive.trajectoryBuilder(trajInit.end())
-                .strafeRight(TILE)
+                .strafeRight(5)
                 .build();
 
         Trajectory trajLeft = drive.trajectoryBuilder(trajInit.end())
-                .strafeLeft(10)
+                .back(13)
                 .build();
 
 
@@ -62,6 +62,7 @@ public class RedAutoRight extends LinearOpMode {
                 telemetry.update();
 
                 drive.followTrajectory(trajInit);
+                drive.followTrajectory(trajLeft);
 
             } else if (color == 2) {
                 telemetry.addData("Position: ", "Center");

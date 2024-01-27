@@ -28,20 +28,20 @@ public class RedVision implements VisionProcessor {
     static int readout = 0;
 
     public static double leftValue;
-    public static double rightValue;
+    public static double centerValue;
     public static double leftPixels;
-    public static double rightPixels;
+    public static double centerPixels;
 
     public static double thresh = 0.022;
 
     // Could remove clutter with REGION_WIDTH and REGION_HEIGHT constants
     // This is shown in the SkystoneDeterminationExample.java for easyopencv
     static final Rect LEFT_ROI = new Rect(
-            new Point(150, 50),
-            new Point(150+150, 50+200));
-    static final Rect RIGHT_ROI = new Rect(
-             new Point(375, 50),
-             new Point(375+150, 50+200));
+            new Point(40, 80),
+            new Point(40+150, 80+200));
+    static final Rect CENTER_ROI = new Rect(
+             new Point(250, 80),
+             new Point(250+200, 80+200));
 
     // For what color  
     // Red
@@ -75,29 +75,29 @@ public class RedVision implements VisionProcessor {
 
 
     Mat left = mat.submat(LEFT_ROI);
-    Mat right = mat.submat(RIGHT_ROI);
+    Mat center = mat.submat(CENTER_ROI);
 
     leftPixels = Core.countNonZero(left);
-    rightPixels = Core.countNonZero(right);
+    centerPixels = Core.countNonZero(center);
 
     leftValue = leftPixels / LEFT_ROI.area();
-    rightValue = rightPixels / RIGHT_ROI.area();
+    centerValue = centerPixels / CENTER_ROI.area();
 
     left.release();
-    right.release();
+    center.release();
 
-     if (leftPixels>rightPixels && (leftValue>thresh)) {
-      readout = 2;
-     } else if (rightPixels>leftPixels && (rightValue>thresh)) {
-      readout = 3;
-     } else {
+     if (leftPixels>centerPixels && (leftValue>thresh)) {
       readout = 1;
+     } else if (centerPixels>leftPixels && (centerValue>thresh)) {
+      readout = 2;
+     } else {
+      readout = 3;
      }
 
     Imgproc.cvtColor(mat, mat, Imgproc.COLOR_GRAY2RGB);
 
     Imgproc.rectangle(mat, LEFT_ROI, readout == 1? Yes:No);
-    Imgproc.rectangle(mat, RIGHT_ROI, readout == 3? Yes:No);
+    Imgproc.rectangle(mat, CENTER_ROI, readout == 3? Yes:No);
 
          mat.copyTo(frame);
          mat.release();

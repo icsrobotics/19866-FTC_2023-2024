@@ -73,6 +73,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
 
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private DcMotorEx leftArm, rightArm, scooper;
+    private Servo shooter;
     private List<DcMotorEx> motors;
 
     public IMU imu;
@@ -113,6 +114,8 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
 
         scooper = hardwareMap.get(DcMotorEx.class, "SCOOPER");
 
+        shooter = hardwareMap.get(Servo.class, "SHOOTER");
+
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
@@ -132,8 +135,8 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         }
 
         // TODO: reverse any motors using DcMotor.setDirection()
-         rightFront.setDirection(DcMotor.Direction.REVERSE);
-         rightRear.setDirection(DcMotor.Direction.REVERSE);
+        rightFront.setDirection(DcMotor.Direction.REVERSE);
+        rightRear.setDirection(DcMotor.Direction.REVERSE);
 
         leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
         rightArm.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -310,6 +313,8 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     public void setScooperPower(double power) {
         scooper.setPower(power);
     }
+
+    public void setShooterPosition(double position) { shooter.setPosition(position); }
 
     @Override
     public double getRawExternalHeading() {
