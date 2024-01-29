@@ -73,7 +73,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
 
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private DcMotorEx leftArm, rightArm, scooper;
-    private Servo shooter;
+    private Servo shooter, claw;
     private List<DcMotorEx> motors;
 
     public IMU imu;
@@ -115,6 +115,8 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         scooper = hardwareMap.get(DcMotorEx.class, "SCOOPER");
 
         shooter = hardwareMap.get(Servo.class, "SHOOTER");
+
+        claw = hardwareMap.get(Servo.class, "CLAW");
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -315,6 +317,8 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     }
 
     public void setShooterPosition(double position) { shooter.setPosition(position); }
+
+    public void setClawPosition(double position) { claw.setPosition(position); }
 
     @Override
     public double getRawExternalHeading() {

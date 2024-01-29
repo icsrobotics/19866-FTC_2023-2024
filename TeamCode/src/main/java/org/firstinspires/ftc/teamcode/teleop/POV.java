@@ -53,6 +53,12 @@ public class POV extends LinearOpMode {
             robot.setArmPower(-gamepad2.left_stick_y);
             robot.setScooperPower(gamepad2.right_stick_y);
 
+            if (gamepad2.dpad_up) {
+                robot.setClawPosition(1.0);
+            } else if (gamepad2.dpad_down) {
+                robot.setClawPosition(0.0);
+            }
+
             if (gamepad2.y) {
                 robot.setShooterPosition(1.0);
             } else {
