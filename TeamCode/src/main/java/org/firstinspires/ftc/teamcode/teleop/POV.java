@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
@@ -10,17 +11,24 @@ import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 @Config
 @TeleOp
 public class POV extends LinearOpMode {
-    public double multiplier = 0.9;
+    double multiplier = 0.9;
+
+    ElapsedTime timer = new ElapsedTime();
+    boolean isEndgame = false;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
         MecanumDrive robot = new MecanumDrive(hardwareMap);
 
         waitForStart();
+        timer.reset();
 
         if (isStopRequested()) return;
 
         while (opModeIsActive() && !isStopRequested()) {
+
+            if (timer.seconds() >= 90) { isEndgame = true; }
 
             double leftFPower;
             double rightFPower;
@@ -50,7 +58,6 @@ public class POV extends LinearOpMode {
             }
             robot.setMotorPowers(leftFPower, leftBPower, rightBPower, rightFPower);
 
-            robot.setArmPower(-gamepad2.left_stick_y);
             robot.setScooperPower(gamepad2.right_stick_y);
 
             if (gamepad2.dpad_up) {
@@ -59,11 +66,19 @@ public class POV extends LinearOpMode {
                 robot.setClawPosition(0.0);
             }
 
-            if (gamepad2.y) {
+            // ITS THE END OF UR LIFE. ENDGAME!!!
+            if (isEndgame) { robot.setArmPower(-gamepad2.left_stick_y); }
+
+            if (gamepad2.y && isEndgame) {
                 robot.setShooterPosition(1.0);
             } else {
                 robot.setShooterPosition(0.5);
             }
+
+
+            telemetry.addData("seconds in match: ", timer.seconds());
+            telemetry.update();
         }
     }
 }
+

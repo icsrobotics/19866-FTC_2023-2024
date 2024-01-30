@@ -300,11 +300,11 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     }
 
     @Override
-    public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(v);
-        leftRear.setPower(v1);
-        rightRear.setPower(v2);
-        rightFront.setPower(v3);
+    public void setMotorPowers(double leftFrontP, double leftRearP, double rightRearP, double rightFrontP) {
+        leftFront.setPower(leftFrontP);
+        leftRear.setPower(leftRearP);
+        rightRear.setPower(rightRearP);
+        rightFront.setPower(rightFrontP);
     }
 
     public void setArmPower(double power) {
