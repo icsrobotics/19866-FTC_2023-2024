@@ -97,7 +97,7 @@ public class RedVision implements VisionProcessor {
     Imgproc.cvtColor(mat, mat, Imgproc.COLOR_GRAY2RGB);
 
     Imgproc.rectangle(mat, LEFT_ROI, readout == 1? Yes:No);
-    Imgproc.rectangle(mat, CENTER_ROI, readout == 3? Yes:No);
+    Imgproc.rectangle(mat, CENTER_ROI, readout == 2? Yes:No);
 
          mat.copyTo(frame);
          mat.release();

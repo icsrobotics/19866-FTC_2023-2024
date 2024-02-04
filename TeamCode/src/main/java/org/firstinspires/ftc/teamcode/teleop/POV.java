@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -15,11 +17,18 @@ public class POV extends LinearOpMode {
 
     ElapsedTime timer = new ElapsedTime();
     boolean isEndgame = false;
+    boolean firstRumble = false;
 
+    // lets say 15 sec
+    boolean lastXSeconds = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
         MecanumDrive robot = new MecanumDrive(hardwareMap);
+        Gamepad.RumbleEffect customRumbleEffect;    // Use to build a custom rumble sequence.
+        customRumbleEffect = new Gamepad.RumbleEffect.Builder()
+                .addStep(1.0, 1.0, 500)  //  Rumble right motor 100% for 500 mSec
+                .build();
 
         waitForStart();
         timer.reset();
@@ -29,6 +38,7 @@ public class POV extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
 
             if (timer.seconds() >= 90) { isEndgame = true; }
+            if (timer.seconds() >= 105) { lastXSeconds = true; }
 
             double leftFPower;
             double rightFPower;
@@ -74,7 +84,12 @@ public class POV extends LinearOpMode {
             } else {
                 robot.setShooterPosition(0.5);
             }
-
+            if (isEndgame && !firstRumble)  {
+                gamepad1.runRumbleEffect(customRumbleEffect);
+                firstRumble = true;
+            } else if (firstRumble && lastXSeconds) {
+                gamepad1.runRumbleEffect(customRumbleEffect);
+            }
 
             telemetry.addData("seconds in match: ", timer.seconds());
             telemetry.update();
